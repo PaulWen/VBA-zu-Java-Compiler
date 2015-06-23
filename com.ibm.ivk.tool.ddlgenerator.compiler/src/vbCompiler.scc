@@ -1,0 +1,527 @@
+Package com.ibm.ivk.tool.ddlgenerator.sablecc;
+
+Helpers
+	any_character = (' ' | '~' | '{' | '}' | '`' | ';' | '[' | ']' | '!' | '$' | ':' | '/' | '*' | '+' | '@' | '|' | ''' | '\' | '%' | '(' |  ')' | '<' | '>' | '?' | '.' | '&' | ',' | '=' | '_' | '-' | '#' | ' ' | ['a' .. 'z'] | ['A' .. 'Z'] | 'Ü' | 'ü' | 'Ä' | 'ä' | 'Ö' | 'ö' | 'ß' | ['0' .. '9']);
+	white_space = (' ')*;
+	end_of_line = (':' | 10 | 13 | 9);
+	digit = ['0' .. '9'];	
+	
+Tokens
+	// zu ignorierende Tokens
+	white_space = white_space;
+	option_expl = 'Option Explicit';
+	continue_mark = '_' end_of_line;
+	dim = 'Dim';
+	by_ref = 'ByRef';
+	by_val = 'ByVal';
+	set = 'Set';
+
+	// Zeilenumbruch
+	end_of_line = end_of_line;
+
+	// Zeichen
+	open_paren = '(';
+	close_paren = ')';
+	comma = ',';
+	as = 'As';
+	allocation = '=';
+	boolean_token_true = 'True';
+	boolean_token_false = 'False';
+
+	// arithmetische Operatoren
+	addition = '+';
+	subtraction = '-';
+	multiplication = '*';
+	division = '/';
+	modulo = 'Mod';
+	
+	// logische Operatoren
+	not = 'Not';
+	not_equal = '<>';
+	less_than = '<';
+	greater_than = '>';
+	less_than_or_equal = '<=';
+	greater_than_or_equal = '>=';
+	
+	// Modifier
+	static = 'Static';
+	declare = 'Declare';
+	private = 'Private';
+	public = 'Public';
+	global = 'Global';
+	const = 'Const';
+	optional = 'Optional';
+	
+	
+	// Datentypen
+	null = 'Null';
+	attribute = 'Attribute';
+	integer = 'Integer';
+	long = 'Long';
+	single = 'Single';
+	boolean = 'Boolean';
+	string = 'String';
+		// Array
+	array_resize_token = 'ReDim';
+	preserve = 'Preserve';
+	to = 'To';
+		//Enum
+	enum_start = 'Enum';
+	enum_end = 'End Enum';
+		// eigener Objekt-Datentyp
+	type_start = 'Type';
+	type_end = 'End Type';
+	
+	// Methoden
+		// ohne Rückgabewert
+	sub_start = 'Sub';
+	sub_end = 'End Sub';
+			// mit Rückgabewert
+	function_start = 'Function';
+	function_end = 'End Function';
+		// Methode aus dll-Datei importieren (der Import von dll-Dateien ist so selten, das jeder Import explizit/einzeln behandelt wird)
+	dll_function_token = 'SetHandleCount% Lib "kernel32" (ByVal n%)';
+	dll_function_call_token = 'SetHandleCount% 1000'; 
+	
+	active_window = 'ActiveWindow';
+	active_worbook = 'ActiveWorkbook';
+	active_sheet = 'ActiveSheet';
+	workbooks = 'Workbooks';
+	workbook = 'Workbook';
+	worksheets = 'Worksheets';
+	sheets = 'Sheets';
+	selected_sheets = 'SelectedSheets';
+	worksheet = 'Worksheet';
+	wait = 'wait';
+	copy = 'Copy';
+	full_name = 'FullName';
+	name = 'Name';
+	hidden = 'Hidden';
+	visible = 'Visible';
+	cells = 'Cells';
+	select = 'Select';
+	count = 'Count';
+	move = 'Move';
+	add = 'Add';
+	delete = 'Delete';
+	activate = 'Activate';
+	selection = 'Selection';
+	format_conditions = 'FormatConditions';
+	interior = 'Interior';
+	auto_fit = 'AutoFit';
+	range = 'Range';
+	rows = 'Rows';
+	columns = 'Columns';
+	entire_row = 'EntireRow';
+	entire_column = 'EntireColumn';
+	now = 'Now';
+	
+	
+		// sonstige Methoden
+	c_str = 'CStr';
+	c_int = 'CInt';
+	u_case = 'UCase'; // String in Großbuchstaben umwandeln
+	len = 'Len';
+	mid = 'Mid';
+	left = 'Left';
+	right = 'Right';
+	trim = 'Trim';
+	u_bound = 'UBound';
+	l_bound = 'LBound';
+	c_lng = 'CLng';
+	c_dbl = 'CDbl';
+	c_sng = 'CSng';
+	r_trim = 'RTrim';
+	l_trim = 'LTrim';
+	l_case = 'LCase';
+	split = ('Split' | 'split');
+	format = 'Format';
+	space = 'Space';
+	chr = 'Chr';
+	in_str = 'InStr';
+	replace = 'Replace'; 	
+	
+	// logische Operatoren
+	or = 'Or';
+	and = 'And';
+	
+	// Verzweigungen
+	if = 'If';
+	short_if = 'IIf';
+	else_if = 'ElseIf';
+	else = 'Else';
+	end_if = 'End If';
+	then = 'Then';
+	
+	select_start = 'Select Case';
+	select_case = 'Case';
+	select_end = 'End Select';
+	
+	// Schleifen
+	in = 'In';
+	each_start = 'Each';
+	
+	for_start = 'For';
+	for_end = 'Next';
+	for_step = 'Step';
+	
+	while_start = 'While';
+	while_end = 'Wend';
+	
+	do_while_start = 'Do While';
+	do_while_end = 'Loop';
+	
+	// Method Chaining
+	method_chaining_operator = '.';
+	
+	// Error Handling
+	try_resume_next = 'On Error Resume Next';
+	try_set_name = 'On Error GoTo setName';
+	try_error_exit = 'On Error GoTo ErrorExit';
+	
+	// GoTo
+	goto = 'GoTo';
+	goto_id = ['A' .. 'Z'] ( '_' | ['a' .. 'z'] | ['A' .. 'Z'] |  ['0' .. '9'])* ':';
+	
+	// Beenden
+	exit_for = 'Exit For';
+	exit_sub = 'Exit Sub';
+	exit_function = 'Exit Function';
+	
+	// Print
+	hash = '#'; // (hash) All data written to the file using Print # is internationally aware
+	
+	open_file = 'Open';
+	open_file_append_mode = 'Append As';
+	open_file_input_mode = 'Input As';
+	open_file_output_mode = 'Output As';
+	print = 'Print';
+	free_file= 'FreeFile';
+ 	debug_print = 'Debug.Print';
+	kill = 'Kill'; // Datei löschen
+	close = 'Close';
+	input = 'Input';
+	lof = 'LOF';
+	
+	// Kommentar
+	comment_token = ''' (any_character | white_space | ':'| '"')*;
+
+	// Msg-Box
+	msg_box = 'MsgBox';
+	
+	// Zeichenkette
+	string_token = '"' (any_character | '""')* '"';
+	ampersand = '&';
+	semicolon = ';';
+	// Zahl
+	number = ('-')* digit (digit)*;
+	// ID (der Name einer Variable oder Methode)
+	id_token = (['a' .. 'z'] | ['A' .. 'Z']) ( '_' | ['a' .. 'z'] | ['A' .. 'Z'] |  ['0' .. '9'])*;
+	
+Ignored Tokens
+	white_space,
+	continue_mark,
+	by_ref,
+	dim,
+	set,
+	hash,
+	option_expl;
+	
+
+	
+
+Productions	
+	// Startpunkt der Produktion
+	file = file_stmt*;
+
+	// alle Statements die NICHT innerhalb einer Methode stehen
+	file_stmt = 
+			{attribute_dec_in}attribute_dec_in general_stmt |
+			{var_dec} var_dec general_stmt |
+			{var_dec_in} var_dec_in general_stmt |
+			{array_dec} array_dec general_stmt |
+			{enum_dec_in} enum_dec_in general_stmt | 
+			{type_dec}type_dec general_stmt |
+			{sub} sub general_stmt |
+			{function} function general_stmt |
+			{function_without_return_type}function_without_return_type general_stmt |
+			{dll_function}dll_function general_stmt |
+			{wait_sub} wait_sub |
+			{general_stmt} general_stmt;
+		
+	// alle Statements die innerhalb einer Methode stehen können (und somit auch innerhalb einer Schleife etc. stehen können)
+	function_stmt =
+			{attribute_dec_in}attribute_dec_in general_stmt |
+			{var_dec} var_dec general_stmt |
+			{var_dec_in}var_dec_in general_stmt |
+			{var_dec_in_with_data_type}var_dec_in_with_data_type general_stmt |
+			{var_dec_list}var_dec_list general_stmt |
+			{array_dec}array_dec general_stmt |
+			{var_set} var_set general_stmt |
+			{if_stmt} if_stmt general_stmt |
+			{if_stmt_one_line}if_stmt_one_line general_stmt |
+			{else_if_stm}else_if_stm general_stmt |
+			{else_stmt}else_stmt general_stmt |
+			{select_stmt}select_stmt general_stmt |
+			{for_each_stmt}for_each_stmt general_stmt |
+			{for_each_stmt_only_next}for_each_stmt_only_next general_stmt |
+			{for_stmt}for_stmt general_stmt |
+			{for_stmt_step}for_stmt_step general_stmt |
+			{while_stmt}while_stmt general_stmt |
+			{do_while}do_while general_stmt |
+			{try}try general_stmt |
+			{goto_call}goto_call general_stmt |
+			{goto_code_start}goto_code_start general_stmt |
+			{exit_for}exit_for general_stmt|
+			{exit_sub}exit_sub general_stmt|
+			{exit_function}exit_function general_stmt|
+			{method_call} method_call general_stmt |
+			{method_call_without_parens}method_call_without_parens general_stmt |
+			{dll_function_call}dll_function_call general_stmt |
+			{wait_sub_call} wait_sub_call general_stmt |
+			{array_resize} array_resize general_stmt |
+			{array_resize_preserve_data}array_resize_preserve_data general_stmt |
+			{array_set_element} array_set_element general_stmt |
+			{open_file_function}open_file_function general_stmt |
+			{close_file_function}close_file_function general_stmt |
+			{print_function}print_function general_stmt |
+			{debug_print_function}debug_print_function general_stmt |
+			{kill_function}kill_function general_stmt |
+			{rename_file_function}rename_file_function general_stmt |
+			{msg_box_function_without_parens}msg_box_function_without_parens general_stmt |
+			{excel_sheet}excel_sheet general_stmt |
+			{set_hidden_function}set_hidden_function general_stmt |
+			{set_visible_function}set_visible_function general_stmt |
+			{select_function}select_function general_stmt |
+			{move_function}move_function general_stmt |
+			{auto_fit_function}auto_fit_function general_stmt |
+			{set_name_excel_function}set_name_excel_function general_stmt |
+			{copy_function}copy_function general_stmt |
+			{delete_function}delete_function general_stmt |
+			{activate_function}activate_function general_stmt |
+			{set_cell_function}set_cell_function general_stmt |
+			{general_stmt} general_stmt;
+			
+
+	// Statements die überall vorkommen können
+	general_stmt = 
+			{comment}comment |
+			{end_of_line}end_of_line;		
+			
+			
+	// Werte
+	id =  id_token;
+	not_id = not id;
+
+	method_chaining = [first]:method_chaining_part method_chaining_part* method_chaining_value | {only_value}id;
+		method_chaining_part = method_chaining_value method_chaining_operator;
+		method_chaining_value = {id}id | {method_call}method_call;
+	
+	character_string = [first]:string_part string_part* string_part_value | {only_value}string_token;
+		string_part = string_part_value ampersand;
+		string_part_value = {get_name_excel_function}get_name_excel_function | {len_function}len_function | {now_function}now_function | {excel_cell}excel_cell | {method_chaining}method_chaining | {string}string_token | {short_if_stmt} short_if_stmt | {arithmetic_expression}arithmetic_expression | {arithmetic_expression_in_parens} open_paren arithmetic_expression close_paren | {c_int_function}c_int_function | {trim_function}trim_function | {r_trim_function}r_trim_function | {method_call}method_call | {u_case_function}u_case_function | {l_case_function}l_case_function | {left_function}left_function | {right_function}right_function | {mid_function_two_param}mid_function_two_param | {c_str_function}c_str_function | {c_lng_function}c_lng_function;
+		
+	arithmetic_expression = [first]:arithmetic_expression_part arithmetic_expression_part* arithmetic_expression_part_value | {only_value} number | {negate_id}subtraction id | {negated_arithmetic_expression_in_parens}subtraction open_paren arithmetic_expression close_paren;
+		arithmetic_expression_part = arithmetic_expression_part_value arithmetic_operator;
+		arithmetic_expression_part_value = {arithmetic_expression_part_value_not_negated}arithmetic_expression_part_value_not_negated | {arithmetic_expression_part_value_negated}arithmetic_expression_part_value_negated;
+			arithmetic_expression_part_value_not_negated = {string_token}string_token | {method_chaining}method_chaining | {number}number | {short_if_stmt} short_if_stmt | {method_call}method_call | {c_int_function}c_int_function | {len_function}len_function | {l_bound_function}l_bound_function | {u_bound_function}u_bound_function;
+			arithmetic_expression_part_value_negated = subtraction arithmetic_expression_part_value_not_negated;
+	
+	boolean_value_true = boolean_token_true;
+	boolean_value_false = boolean_token_false;
+	
+	value = {null} null | {input_function}input_function | {free_file_function}free_file_function | {lof_function}lof_function | {split_function_with_limit}split_function_with_limit | {now_function}now_function | {format_function}format_function | {space_function}space_function | {id_in_parens}open_paren id close_paren | {count_function}count_function | {excel_workbook}excel_workbook | {cell}excel_cell | {sheet}excel_sheet | {msg_box_function}msg_box_function | {method_chaining}method_chaining | {short_if_stmt}short_if_stmt | {character_string}character_string | {arithmetic_expression}arithmetic_expression | {arithmetic_expression_in_parens} open_paren arithmetic_expression close_paren | {method}method_call | {condition}condition | {true}boolean_value_true | {false} boolean_value_false | {c_str_function}c_str_function | {c_int_function}c_int_function | {u_case_function}u_case_function | {l_case_function}l_case_function | {len_function}len_function | {mid_function}mid_function | {mid_function_two_param}mid_function_two_param | {left_function}left_function | {right_function}right_function | {trim_function}trim_function | {l_bound_function}l_bound_function | {u_bound_function}u_bound_function |{c_lng_function}c_lng_function | {c_dbl_function}c_dbl_function | {c_sng_function}c_sng_function | {r_trim_function}r_trim_function | {split_function}split_function | {chr_function}chr_function;
+	boolean_value = {lof_function}lof_function | {short_if_stmt}short_if_stmt | {method_chaining_in_parens}open_paren method_chaining close_paren | {method_chaining}method_chaining | {method}method_call | {true}boolean_value_true | {false} boolean_value_false | {c_int_function}c_int_function;
+	string_value = {string_value_without_parens}string_value_without_parens | {string_value_with_parens}string_value_with_parens;
+		string_value_without_parens = {excel_cell}excel_cell | {method_chaining}method_chaining | {short_if_stmt}short_if_stmt | {character_string} character_string | {method}method_call | {c_str_function}c_str_function | {u_case_function}u_case_function | {l_case_function}l_case_function | {mid_function}mid_function | {mid_function_two_param}mid_function_two_param  | {left_function}left_function | {right_function}right_function | {trim_function}trim_function;
+		string_value_with_parens = open_paren string_value_without_parens close_paren;
+	int_value = {arithmetic_expression}arithmetic_expression | {short_if_stmt}short_if_stmt | {method_chaining}method_chaining | {method}method_call | {len_function}len_function | {c_int_function}c_int_function;
+	
+	// Datentypen
+	data_type = {long}long | {integer}integer | {single}single | {string}string | {boolean}boolean | {id}id | {workbook}workbook | {worksheet}worksheet | {integer_array}integer open_paren close_paren;
+	// Modifier
+	modifier = {by_val}by_val | {static}static | {declare}declare | {global}global | {const}const | {private}private | {public}public; 
+	
+	// logische Operatoren
+	logical_operator = {not}not | {equal}allocation | {not_equal}not_equal | {less_than}less_than | {greater_than}greater_than | {less_than_or_equal}less_than_or_equal | {greater_than_or_equal}greater_than_or_equal;
+	
+	// arithmetische Operatoren
+	arithmetic_operator = {addition}addition | {subtraction}subtraction | {multiplication}multiplication | {division}division | {modulo}modulo;
+	
+	// Helper
+	modifier_id = modifier* id;
+	
+
+	// Kommentar
+	comment = comment_token end_of_line;
+	
+	// Variablen Deklaration mit direkter Initialisierung
+	var_dec_in = modifier_id allocation value;
+	var_dec_in_with_data_type = modifier_id as data_type allocation value;
+	enum_dec_in = modifier* enum_start id end_of_line enum_value* enum_end;
+		enum_value = {general_stmt}general_stmt | {var_set}var_set general_stmt | {without_value}id general_stmt;
+	
+	// Variablen Deklaration
+	attribute_dec_in = attribute method_chaining allocation value;
+	
+	var_dec = modifier_id as data_type;
+	var_dec_list = [first]:var_dec_list_value var_dec_list_value* var_dec;
+	var_dec_list_value = var_dec comma;
+	
+	array_dec = modifier_id param_call_list as data_type | {range} modifier_id open_paren [smallest]:value to [largest]:value close_paren as data_type;
+	
+	// den Wert einer Variable neu setzen
+	var_set	= method_chaining allocation value | {trim}trim_function allocation value | {add_function} method_chaining allocation add_function;
+	
+	
+	// mit einem Array interagieren
+	array_resize = array_resize_token method_chaining open_paren [smallest]:value to [largest]:value close_paren;
+	array_resize_preserve_data = array_resize_token preserve method_chaining open_paren [smallest]:value to [largest]:value close_paren;
+		// einen Variablen Wert an ein Array Element übergeben - der Index des Array Elements wird in einer Variable mitgegeben
+	array_set_element = method_chaining param_call_list allocation value;
+	
+	
+	// eigene Objekt-Datentypen definieren
+	type_dec = modifier* type_start id end_of_line type_dec_value* type_end;
+		type_dec_value = {var_dec}var_dec general_stmt | {array_dec}array_dec general_stmt | {general_stmt}general_stmt;
+	
+	// Methoden	
+		// Methode ohne Rückgabewert deklarieren
+	sub = modifier* sub_start id param_list end_of_line function_stmt* sub_end;
+		param_list = open_paren param_part* param_value close_paren | {no_param}open_paren close_paren;
+		param_part = param_value comma;
+		param_value = {param}var_dec | {array_param}array_dec | {optional_param_value}optional_param_value | {param_without_data_type}modifier* id;
+		optional_param_value = {optional_param}optional modifier* id as data_type allocation value | {optional_param_as_type}optional modifier* id as [data_type]:id | {optional_param_as_boolean}optional modifier* id as boolean | {optional_param_as_integer}optional modifier* id as integer | {optional_param_as_string}optional modifier* id as string | {optional_param_no_data_type}optional modifier* id allocation value;
+			// Methode mit Rückgabewert deklarieren
+	function = modifier* function_start id param_list as data_type end_of_line function_stmt* function_end;
+	function_without_return_type = modifier* function_start id param_list end_of_line function_stmt* function_end;
+		
+		// Methode aufrufen
+	method_call_in_parens = open_paren method_call close_paren;
+	method_call = id param_call_list | {replace}replace param_call_list | {in_str}in_str param_call_list;
+		param_call_list = open_paren param_call_part* param_call_value close_paren | {no_param} open_paren close_paren;
+		param_call_part = param_call_value comma | {comma} comma;
+		param_call_value = {more_param_call_values}more_param_call_values | {arithmetic_expression}arithmetic_expression;
+			more_param_call_values = {input_function}input_function | {lof_function}lof_function | {l_bound_function}l_bound_function | {condition}condition | {excel_workbook}excel_workbook | {excel_sheet}excel_sheet | {method_chaining}method_chaining | {get_name_excel_function}get_name_excel_function | {cell}excel_cell | {active_worbook_full_name_function}active_worbook_full_name_function | {l_case_function}l_case_function | {param_with_param_name}param_with_param_name | {short_if_stmt}short_if_stmt | {character_string} character_string | {method}method_call | {true}boolean_value_true | {false} boolean_value_false | {c_str_function}c_str_function | {c_int_function}c_int_function | {u_case_function}u_case_function | {len_function}len_function | {mid_function}mid_function | {left_function}left_function | {right_function}right_function | {trim_function}trim_function | {u_bound_function}u_bound_function; 
+	method_call_without_parens = method_chaining param_call_list_without_parens | {no_param}method_chaining;
+		param_call_list_without_parens = param_call_list_without_parens_part* param_call_list_without_parens_value;
+		param_call_list_without_parens_part = param_call_list_without_parens_value comma | {comma} comma;
+		param_call_list_without_parens_value = {simpel_condition}simpel_condition | {excel_workbook}excel_workbook | {param_with_param_name}param_with_param_name | {short_if_stmt}short_if_stmt | {method_chaining}method_chaining | {character_string} character_string | {arithmetic_expression}arithmetic_expression | {method}method_call | {true}boolean_value_true | {false} boolean_value_false | {c_str_function}c_str_function | {c_int_function}c_int_function | {u_case_function}u_case_function  | {len_function}len_function | {mid_function}mid_function | {left_function}left_function | {right_function}right_function | {trim_function}trim_function;
+		// der Parametername kann bei einem Methodenaufruf mit angegben werden
+	param_with_param_name = goto_id allocation value;
+		
+		// explizit behandelte Methoden 
+	dll_function = modifier* function_start dll_function_token;
+	dll_function_call = comment dll_function_call_token;
+	wait_sub = sub_start wait param_list end_of_line function_stmt* sub_end;
+	wait_sub_call = wait [duration]:int_value;
+	
+	c_str_function = c_str open_paren value close_paren;
+	c_int_function = c_int open_paren value close_paren; 
+	u_case_function = u_case open_paren value close_paren;
+	len_function = len open_paren value close_paren;
+	mid_function = mid open_paren [string]:string_value [a]:comma [begin_index]:value [b]:comma [length]:value close_paren;
+	mid_function_two_param = mid open_paren [string]:string_value [a]:comma [begin_index]:value close_paren;
+	left_function = left open_paren [string]:string_value comma [length]:value close_paren;
+	right_function = right open_paren [string]:string_value comma [length]:value close_paren;
+	trim_function = trim open_paren [string]:string_value close_paren;
+	u_bound_function = u_bound open_paren value close_paren;
+	l_bound_function = l_bound open_paren value close_paren;
+	c_lng_function = c_lng open_paren value close_paren;
+	c_dbl_function = c_dbl open_paren string_value close_paren;
+	c_sng_function = c_sng open_paren string_value close_paren;
+	r_trim_function = r_trim open_paren string_value close_paren;
+	l_trim_function = l_trim open_paren string_value close_paren;
+	l_case_function = l_case open_paren string_value close_paren;
+	split_function = split open_paren [string]:string_value comma [delimiter]:string_value close_paren;
+	split_function_with_limit = split open_paren [string]:string_value [a]:comma [delimiter]:string_value [b]:comma [limit]:number close_paren;
+	format_function = format open_paren now_function comma [format_value]:string_value close_paren;
+	space_function = space open_paren number close_paren;
+	chr_function = chr open_paren number close_paren;
+	now_function = now;
+	
+	// Verzweigungen
+	if_stmt = if  value then end_of_line function_stmt* end_if;
+	if_stmt_one_line = if  value then [first]:if_stmt_one_line_value if_stmt_one_line_value*;
+		if_stmt_one_line_value = {exit_for}exit_for | {method_chaining}method_chaining | {var_set}var_set | {else_stmt}else_stmt | {auto_fit_function}auto_fit_function | {method_call}method_call;
+	else_if_stm = else_if  value then;
+	else_stmt = else;
+	short_if_stmt = short_if open_paren  value [a]:comma [true]:value [b]:comma [false]:value close_paren;
+	select_stmt = select_start value end_of_line select_case_stmt* select_end;
+	select_case_stmt = {default}select_case else end_of_line function_stmt* | {values}select_case param_call_list_without_parens end_of_line function_stmt*;
+	
+	// logische Verknüpfungen
+	condition_in_parens = open_paren condition close_paren;
+	condition = [first]:logical_part logical_part* logical_value | {not}not [first]:logical_part logical_part* logical_value | {comparison}comparison | {condition_in_parens}condition_in_parens | {not_value}not logical_value;
+	logical_part = {and}logical_value and | {or}logical_value or | {and_not} logical_value and not | {or_not} logical_value or not;
+	logical_value = {condition_in_parens}condition_in_parens | {comparison}comparison | {value}boolean_value | {number}number;
+		// etwas was true oder false ist und mit einem Vergleichsoperator ERZEUGT wird
+	comparison = [a]:comparison_value logical_operator [b]:comparison_value;
+	comparison_value = {lof_function}lof_function | {condition_in_parens}condition_in_parens | {get_name_excel_function}get_name_excel_function | {msg_box_function}msg_box_function | {excel_cell}excel_cell | {method_chaining}method_chaining | {short_if_stmt}short_if_stmt | {character_string} character_string | {character_string_in_paranes}open_paren character_string close_paren | {method}method_call | {method_call_in_parens}method_call_in_parens | {c_str_function}c_str_function | {u_case_function}u_case_function | {l_case_function}l_case_function | {mid_function}mid_function | {mid_function_two_param}mid_function_two_param  | {left_function}left_function | {right_function}right_function | {trim_function}trim_function | {arithmetic_expression}arithmetic_expression | {arithmetic_expression_in_parens}open_paren arithmetic_expression close_paren | {true}boolean_value_true | {false} boolean_value_false | {c_int_function}c_int_function | {len_function}len_function | {u_bound_function}u_bound_function | {l_bound_function}l_bound_function;
+	
+	simpel_condition = simpel_condition_part* simpel_condition_value;
+	simpel_condition_part = {or}simpel_condition_value or;
+	simpel_condition_value = {id}id | {short_if_stmt}short_if_stmt | {not_id}not_id;
+	
+	// Schleifen
+	for_each_stmt = for_start each_start id in [list]:method_chaining end_of_line function_stmt* for_end [variable]:id;
+	for_each_stmt_only_next = for_start each_start [variable]:id in [list]:method_chaining end_of_line function_stmt* for_end;
+	for_stmt = for_start var_set to [limit]:value end_of_line function_stmt* for_end [counter]:method_chaining;
+	for_stmt_step = for_start var_set to [limit]:value for_step arithmetic_expression end_of_line function_stmt* for_end [counter]:method_chaining;
+	while_stmt = while_start [condition]:value end_of_line function_stmt* while_end;
+	do_while = do_while_start [condition]:value end_of_line function_stmt* do_while_end;
+
+	// Print
+	open_file_function = open_file [file_name]:id for_start open_file_mode [file_number]:id;
+		open_file_mode = {open_file_append_mode}open_file_append_mode | {open_file_input_mode}open_file_input_mode | {open_file_output_mode}open_file_output_mode;
+	close_file_function = close [file_number]:method_chaining;
+	print_function = {a}print [file_number]:id comma print_function_part* value | {b}print [file_number]:id comma print_function_part*;
+		print_function_part = {value_comma}value comma | {value_semicolon}value semicolon | {semicolon}semicolon;
+	free_file_function = free_file open_paren close_paren;
+	debug_print_function = debug_print print_function_part* value;
+	kill_function = kill string_value;
+	rename_file_function = name [old_name]:string_value as [new_name]:string_value;
+	input_function = input open_paren lof_function comma [file_number]:method_chaining close_paren;
+	lof_function = lof open_paren [file_number]:method_chaining close_paren;
+	
+	//MsgBox
+	msg_box_function = msg_box param_call_list;
+	msg_box_function_without_parens = msg_box param_call_list_without_parens;
+	
+	//Excel
+		// Objekte
+	excel_active_window  = active_window;
+	excel_workbook = {active_worbook}active_worbook | workbooks param_call_list | {id}id;
+	excel_sheet = {active_window}excel_active_window method_chaining_operator excel_sheet_value | {workbook}excel_workbook method_chaining_operator excel_sheet_value | {method_chaining}method_chaining method_chaining_operator excel_sheet_value | {id}id | {worksheets}excel_sheet_value;
+		excel_sheet_value = {selected_sheets}selected_sheets | {active_sheet}active_sheet | {sheets}sheets | {sheets_with_params}sheets param_call_list | {worksheets_with_params}worksheets param_call_list | {worksheets}worksheets;
+	excel_row = excel_sheet method_chaining_operator rows | {cell}excel_cell method_chaining_operator excel_row_value | {rows_rows}excel_sheet [a]:method_chaining_operator [first_rows]:rows param_call_list [b]:method_chaining_operator [second_rows]:rows | {with_params}excel_sheet [a]:method_chaining_operator rows param_call_list [b]:method_chaining_operator excel_row_value;
+		excel_row_value = {entire_row}entire_row;
+	excel_column = 	{cell}excel_cell method_chaining_operator excel_columne_value | {sheet}excel_sheet method_chaining_operator excel_columne_value;
+		excel_columne_value = {entire_column}entire_column | columns;
+	excel_cell = excel_sheet method_chaining_operator excel_cell_value;
+		excel_cell_value = {with_params}cells param_call_list | cells;
+	excel_range = excel_sheet method_chaining_operator excel_range_value;
+		excel_range_value = range param_call_list;
+	excel_selection = {with_params}selection method_chaining_operator format_conditions param_call_list | selection method_chaining_operator format_conditions;
+		
+		// Funktionen
+	copy_function = excel_sheet method_chaining_operator copy param_call_list_without_parens;
+	active_worbook_full_name_function = excel_workbook method_chaining_operator full_name;
+	set_hidden_function = {column}excel_column method_chaining_operator hidden allocation boolean_value | {row}excel_row method_chaining_operator hidden allocation boolean_value;
+	set_visible_function = {sheet}excel_sheet method_chaining_operator visible allocation boolean_value;
+	select_function = {range}excel_range method_chaining_operator select | {cell}excel_cell method_chaining_operator select | {sheet}excel_sheet  method_chaining_operator select;
+	get_name_excel_function = {sheet}excel_sheet method_chaining_operator name | {workbook}excel_workbook method_chaining_operator name;
+	set_name_excel_function = excel_sheet method_chaining_operator name allocation id;
+	count_function = excel_sheet method_chaining_operator count;
+	move_function = excel_sheet method_chaining_operator move param_call_list_without_parens;
+	auto_fit_function = {row}excel_row method_chaining_operator auto_fit | {column}excel_column method_chaining_operator auto_fit;
+	add_function = {sheet}excel_sheet method_chaining_operator add param_call_list;
+	delete_function = {sheet} excel_sheet method_chaining_operator delete;
+	activate_function = {sheet} excel_sheet method_chaining_operator activate;
+	set_cell_function = excel_cell allocation value;
+	
+	// Error Handling
+	try = {try_resume_next}try_resume_next | {try_set_name}try_set_name | {try_error_exit}try_error_exit;
+	goto_call = goto id_token;
+	goto_code_start = goto_id;
+	 
